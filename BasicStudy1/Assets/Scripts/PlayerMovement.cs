@@ -8,11 +8,16 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 5.5f;
 
     private Rigidbody rb;
-    
+
+    public float speedDecreaseRate = 5.0f; // 속도가 줄어드는 속도
+
+    private float targetSpeed;
+
     void Start()
     {
         
         rb = GetComponent<Rigidbody>();
+        targetSpeed = speed;
     }
 
     
@@ -28,5 +33,16 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            targetSpeed = 20.0f; // Shift를 누르면 목표 속도를 20으로
+        }
+        if(Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            targetSpeed = 5.0f;
+        }
+
+        speed = Mathf.Lerp(speed, targetSpeed, Time.deltaTime * speedDecreaseRate);
     }
 }
